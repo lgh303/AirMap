@@ -3,103 +3,232 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <script src="/static/js/jquery-latest.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Ke2uddz2eEgfpDx3xI7QHAcw"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
-	<script type="text/javascript" src="/static/js/djangocsrf.js"></script>
-    <!-- <script type="text/javascript" src="/static/js/data.js"></script> -->
-    <title>热力图功能示例</title>
     <style type="text/css">
-		ul,li{list-style: none;margin:0;padding:0;float:left;}
-		html{height:100%}
-		body{height:100%;margin:0px;padding:0px;font-family:"微软雅黑";}
-		#container{height:100%;width:100%;}
-		#r-result{width:100%;}
-    </style>	
+    body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ekel89NZaqWXsCcKUpProDoH"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+    <script src="js/esl.js" type="text/javascript"></script>
+    <script language='javascript' src="graph_data.js"></script> 
+    <title>地图展示</title>
 </head>
+
 <body>
-	<!-- <div id="r-result"> -->
-	<!-- 	<input type="button"  onclick="openHeatmap();" value="显示热力图"/><input type="button"  onclick="closeHeatmap();" value="关闭热力图"/> -->
-	<!-- </div> -->
-	<div id="container"></div>
+    <div id="allmap"></div>
 </body>
 </html>
 
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
+        function drawStation(){
+            require.config({
+                paths: {
+                    echarts: './js/echarts' //echarts.js的路径
+                }
+            });
+            require(
+            [
+                'echarts',
+                'echarts/chart/line'
+            ],
+            DrawEChart
+            );
+        }
+        //渲染ECharts图表
+        function DrawEChart(ec) {
+            var chartContainer = document.getElementById("main");
+            var myChart = ec.init(chartContainer);
+            myChart.setOption({
+                title: {
+                    text: "气象站点历史信息", 
+                    x: "center",
+                    subtext: "From: SOA group 3",
+                    textStyle: {
+                        fontSize:24
+                    },
+                    subtextStyle: {
+                        fontSize:12,
+                        color:"red"
+                    }
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['污染程度'], //与series保持一致
+                y:"bottom"
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: false,
+                    dataView: { readOnly: false },
+                    magicType: ['line', 'bar'],
+                    restore: true,
+                    saveAsImage: true
+                }
+            },
+            calculable: true,
+            xAxis: [
+                    {
+                        type: 'category',
+                        name: "日期",
+                        data: function(){
+                            var today = new Date();
+                            var data_length = points.length;
+                            var list = [];
+                            for(var i=0; i<data_length; i++){
+                                var d = new Date(today - 24*60*60*1000*i);
+                                list.push(d.getDate());
+                            }
+                        return list;
+                        }()
+                    }
+                ],
+            yAxis: [
+                    {
+                        type: 'value',
+                        splitArea: { show: true },
+                        name:"数值"
+                    }
+                ],
+            series: [
+                    {
+                        name: '污染程度',
+                        type: 'line',
+                        data: function(){
+                            var data_length = points.length;
+                            var list = [];
+                            for(var i=0; i<data_length; i++){
+                                list.push(points[i][0].count);
+                            }
+                            return list;
+                        }()
+                    }
+                ]
+        });
+        }
 
-if(!isSupportCanvas()) {
-	alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
-}
-
-var map = new BMap.Map("container",{minZoom:5, maxZoom:15});
-var point = new BMap.Point(116.42, 39.91);
-map.centerAndZoom(point, 13);
-map.enableScrollWheelZoom();
-
-heatmapOverlay = new BMapLib.HeatmapOverlay({"radius" : getRadius()});
-map.addOverlay(heatmapOverlay);
-
-retrieveData();
-
-map.addEventListener("zoomend", function() {
-	heatmapOverlay.setOptions({"radius" : getRadius()});
-});
-
-function retrieveData()
-{
-	$.ajax({
-		url : "/",
-		type : "post",
-		data : {
-			"type" : "getdata",
-			"index" : 0,
-		},
-		dataType : "json",
-		success : function(data)
-		{
-			var points = data["data_list"]
-            heatmapOverlay.setDataSet({data:points,max:100});
-            openHeatmap();
-		}
-	});
-}
-
-function getRadius()
-{
-	return pixelDistance(0.012, 0.012);
-}
-
-function pixelDistance(lng_s, lat_s)
-{
-    var p1 = new BMap.Point(116, 39);
-    var p2 = new BMap.Point(116 + lng_s, 39 + lat_s);
-	var pix1 = map.pointToPixel(p1);
-	var pix2 = map.pointToPixel(p2);
-	var d_lng = pix2.x - pix1.x;
-	var d_lat = pix2.y - pix1.y;
-	return Math.sqrt(d_lng * d_lng + d_lat * d_lat);
-}
-
-function openHeatmap(){
-    heatmapOverlay.show();
-}
-function closeHeatmap(){
-    heatmapOverlay.hide();
-}
-
-function setGradient(){
-    var gradient = {};
-    var colors = document.querySelectorAll("input[type='color']");
-    colors = [].slice.call(colors,0);
-    colors.forEach(function(ele){
-		gradient[ele.getAttribute("data-key")] = ele.value; 
-    });
-    heatmapOverlay.setOptions({"gradient":gradient});
-}
-
-function isSupportCanvas(){
-    var elem = document.createElement('canvas');
-    return !!(elem.getContext && elem.getContext('2d'));
-}
 </script>
-<!-- var point = new BMap.Point(108.418261, 37.6); -->
+
+<script>
+    function setRightClickMenu(){
+        var menu = new BMap.ContextMenu();
+        var txtMenuItem = [
+            {
+                text:'放大',
+                callback:function(){map.zoomIn()}
+            },
+            {
+                text:'缩小',
+                callback:function(){map.zoomOut()}
+            },
+            {
+                text:"其他",
+                callback:function(){alert("no function availiable")}
+            }
+        ];
+        for(var i=0; i < txtMenuItem.length; i++){
+            menu.addItem(new BMap.MenuItem(txtMenuItem[i].text,txtMenuItem[i].callback,100));
+        }
+        map.addContextMenu(menu);
+    }
+</script>
+
+<script>
+    function onLeftClick(event){
+        current_x = event.point.lng;
+        current_y = event.point.lat;
+        var opts = {
+            width : 150, // 信息窗口宽度
+            height: 80, // 信息窗口高度
+            title : "Weather Here" // 信息窗口标题
+        }
+        //弹出一个提示窗口
+        var infoWindow = new BMap.InfoWindow("Current position:("+current_x+":"+current_y+")", opts);
+        map.openInfoWindow(infoWindow, new BMap.Point(current_x,current_y));        // 打开信息窗口
+    }
+</script>
+
+<script>
+    function showMarker(){
+
+        var sContent =
+            "<div id=\"main\" style=\"height: 400px; width:800px; border: 1px solid #ccc; padding: 10px;\"></div>";
+        var infoWindow = new BMap.InfoWindow(sContent);
+
+        for(var i=0; i<100; i++){
+            var p = new BMap.Point(points[0][i].lng, points[0][i].lat);
+            var station = new BMap.Marker(p);
+            station.addEventListener("rightclick", function(){          
+                this.openInfoWindow(infoWindow);
+                drawStation();
+                document.getElementById('imgDemo').onload = function (){
+                    infoWindow.redraw();
+                }
+            });
+            map.addOverlay(station);
+        }
+        
+    }
+</script>
+
+<script>
+    function setGradient(){
+        var gradient = {};
+        var colors = document.querySelectorAll("input[type='color']");
+        colors = [].slice.call(colors,0);
+        colors.forEach(function(ele){
+            gradient[ele.getAttribute("data-key")] = ele.value; 
+        });
+        heatmapOverlay.setOptions({"gradient":gradient});
+    }
+    //判断浏览区是否支持canvas
+    function isSupportCanvas(){
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    }
+    function pixel_step(lng_s, lat_s)
+    {
+        var p1 = new BMap.Point(116.4, 39.92);
+        var p2 = new BMap.Point(116.4 + lng_s, 39.92 + lat_s);
+        var pix1 = map.pointToPixel(p1);
+        var pix2 = map.pointToPixel(p2);
+        var d_lng = pix2.x - pix1.x;
+        var d_lat = pix2.y - pix1.y;
+        return Math.sqrt(d_lng * d_lng + d_lat * d_lat);
+    }
+
+
+    function showHeatMap(){
+        if(!isSupportCanvas()){
+            alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
+        }
+
+        map.addEventListener("zoomend", function(){   
+            var pixel_radius = pixel_step(0.003, 0.003);
+            heatmapOverlay.setOptions({"radius":pixel_radius})
+        });
+
+        heatmapOverlay = new BMapLib.HeatmapOverlay({"radius":40});
+        map.addOverlay(heatmapOverlay);
+        heatmapOverlay.setDataSet({data:points[0],max:100});
+    }
+</script>
+
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+    var point = new BMap.Point(116.4, 39.92);
+    map.centerAndZoom(point, 15);  // 初始化地图,设置中心点坐标和地图级别
+    map.setCurrentCity("北京");          // 设置地图显示的城市
+
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+    map.addControl(new BMap.NavigationControl());    //缩放和移动控件
+    map.addControl(new BMap.ScaleControl());        //显示比例尺
+
+    map.addEventListener("click", function(e){onLeftClick(e);}  );      //鼠标左键事件
+    setRightClickMenu();              //地图右键菜单
+    showMarker();                       //显示标记点
+    showHeatMap();                      //显示热力图
+    
+</script>
