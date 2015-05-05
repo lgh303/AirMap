@@ -10,6 +10,7 @@
     <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
     <script src="js/esl.js" type="text/javascript"></script>
     <script language='javascript' src="graph_data.js"></script> 
+    <script language='javascript' src='chart.js'></script>
     <title>地图展示</title>
 </head>
 
@@ -17,97 +18,337 @@
     <div id="allmap"></div>
 </body>
 </html>
+<script type="text/javascript" language="javascript">
+// weather
+    function drawWeather(){
+        require.config({
+            paths: {
+                echarts: './js/echarts' //echarts.js的路径
+            }
+        });
+        require(
+        [
+            'echarts',
+            'echarts/chart/line'
+        ],
+        weatherDrawEChart
+        );
+    }
+
+    //渲染ECharts图表
+    function weatherDrawEChart(ec) {
+        var chartContainer = document.getElementById("weather");
+        var myChart = ec.init(chartContainer);
+        myChart.setOption({
+            title: {
+                text: "气象站点历史信息", 
+                x: "center",
+                subtext: "From: SOA group 3",
+                textStyle: {
+                    fontSize:24
+                },
+                subtextStyle: {
+                    fontSize:12,
+                    color:"red"
+                }
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['污染程度'], //与series保持一致
+            y:"bottom"
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: false,
+                dataView: { readOnly: false },
+                magicType: ['line', 'bar'],
+                restore: true,
+                saveAsImage: true
+            }
+        },
+        calculable: true,
+        xAxis: [
+                {
+                    type: 'category',
+                    name: "日期",
+                    data: function(){
+                        var today = new Date();
+                        var data_length = points.length;
+                        var list = [];
+                        for(var i=0; i<data_length; i++){
+                            var d = new Date(today - 24*60*60*1000*i);
+                            list.push(d.getDate());
+                        }
+                    return list;
+                    }()
+                }
+            ],
+        yAxis: [
+                {
+                    type: 'value',
+                    splitArea: { show: true },
+                    name:"数值"
+                }
+            ],
+        series: [
+                {
+                    name: '污染程度',
+                    type: 'line',
+                    data: function(){
+                        var data_length = points.length;
+                        var list = [];
+                        for(var i=0; i<data_length; i++){
+                            list.push(points[i][globalIterator].count);
+                        }
+                        return list;
+                    }()
+                }
+            ]
+    });
+    }
+
+
+// pollution
+    function drawPollution(){
+        require.config({
+            paths: {
+                echarts: './js/echarts' //echarts.js的路径
+            }
+        });
+        require(
+        [
+            'echarts',
+            'echarts/chart/line'
+        ],
+        pollutionDrawEChart
+        );
+    }
+
+    //渲染ECharts图表
+    function pollutionDrawEChart(ec) {
+        var chartContainer = document.getElementById("pollution");
+        var myChart = ec.init(chartContainer);
+        myChart.setOption({
+            title: {
+                text: "气象站点历史信息", 
+                x: "center",
+                subtext: "From: SOA group 3",
+                textStyle: {
+                    fontSize:24
+                },
+                subtextStyle: {
+                    fontSize:12,
+                    color:"red"
+                }
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['污染程度'], //与series保持一致
+            y:"bottom"
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: false,
+                dataView: { readOnly: false },
+                magicType: ['line', 'bar'],
+                restore: true,
+                saveAsImage: true
+            }
+        },
+        calculable: true,
+        xAxis: [
+                {
+                    type: 'category',
+                    name: "日期",
+                    data: function(){
+                        var today = new Date();
+                        var data_length = points.length;
+                        var list = [];
+                        for(var i=0; i<data_length; i++){
+                            var d = new Date(today - 24*60*60*1000*i);
+                            list.push(d.getDate());
+                        }
+                    return list;
+                    }()
+                }
+            ],
+        yAxis: [
+                {
+                    type: 'value',
+                    splitArea: { show: true },
+                    name:"数值"
+                }
+            ],
+        series: [
+                {
+                    name: '污染程度',
+                    type: 'line',
+                    data: function(){
+                        var data_length = points.length;
+                        var list = [];
+                        for(var i=0; i<data_length; i++){
+                            list.push(points[i][globalIterator].count);
+                        }
+                        return list;
+                    }()
+                }
+            ]
+    });
+    }
+
+
+// temperature
+    function drawTemperature(){
+        require.config({
+            paths: {
+                echarts: './js/echarts' //echarts.js的路径
+            }
+        });
+        require(
+        [
+            'echarts',
+            'echarts/chart/line'
+        ],
+        temperatureDrawEChart
+        );
+    }
+
+    //渲染ECharts图表
+    function temperatureDrawEChart(ec) {
+        var chartContainer = document.getElementById("temperature");
+        var myChart = ec.init(chartContainer);
+        myChart.setOption({
+            title: {
+                text: "气象站点历史信息", 
+                x: "center",
+                subtext: "From: SOA group 3",
+                textStyle: {
+                    fontSize:24
+                },
+                subtextStyle: {
+                    fontSize:12,
+                    color:"red"
+                }
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['污染程度'], //与series保持一致
+            y:"bottom"
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: false,
+                dataView: { readOnly: false },
+                magicType: ['line', 'bar'],
+                restore: true,
+                saveAsImage: true
+            }
+        },
+        calculable: true,
+        xAxis: [
+                {
+                    type: 'category',
+                    name: "日期",
+                    data: function(){
+                        var today = new Date();
+                        var data_length = points.length;
+                        var list = [];
+                        for(var i=0; i<data_length; i++){
+                            var d = new Date(today - 24*60*60*1000*i);
+                            list.push(d.getDate());
+                        }
+                    return list;
+                    }()
+                }
+            ],
+        yAxis: [
+                {
+                    type: 'value',
+                    splitArea: { show: true },
+                    name:"数值"
+                }
+            ],
+        series: [
+                {
+                    name: '污染程度',
+                    type: 'line',
+                    data: function(){
+                        var data_length = points.length;
+                        var list = [];
+                        for(var i=0; i<data_length; i++){
+                            list.push(points[i][globalIterator].count);
+                        }
+                        return list;
+                    }()
+                }
+            ]
+    });
+    }
+</script>
 
 <script type="text/javascript" language="javascript">
-        function drawStation(){
-            require.config({
-                paths: {
-                    echarts: './js/echarts' //echarts.js的路径
-                }
-            });
-            require(
-            [
-                'echarts',
-                'echarts/chart/line'
-            ],
-            DrawEChart
-            );
-        }
-        //渲染ECharts图表
-        function DrawEChart(ec) {
-            var chartContainer = document.getElementById("main");
-            var myChart = ec.init(chartContainer);
-            myChart.setOption({
-                title: {
-                    text: "气象站点历史信息", 
-                    x: "center",
-                    subtext: "From: SOA group 3",
-                    textStyle: {
-                        fontSize:24
-                    },
-                    subtextStyle: {
-                        fontSize:12,
-                        color:"red"
-                    }
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: ['污染程度'], //与series保持一致
-                y:"bottom"
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                    mark: false,
-                    dataView: { readOnly: false },
-                    magicType: ['line', 'bar'],
-                    restore: true,
-                    saveAsImage: true
-                }
-            },
-            calculable: true,
-            xAxis: [
-                    {
-                        type: 'category',
-                        name: "日期",
-                        data: function(){
-                            var today = new Date();
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                var d = new Date(today - 24*60*60*1000*i);
-                                list.push(d.getDate());
-                            }
-                        return list;
-                        }()
-                    }
-                ],
-            yAxis: [
-                    {
-                        type: 'value',
-                        splitArea: { show: true },
-                        name:"数值"
-                    }
-                ],
-            series: [
-                    {
-                        name: '污染程度',
-                        type: 'line',
-                        data: function(){
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                list.push(points[i][0].count);
-                            }
-                            return list;
-                        }()
-                    }
-                ]
-        });
-        }
+    function weather(){
+        var sContent =
+            "<div id=\"weather\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
+        var infoWindow = new BMap.InfoWindow(sContent);
+        map.openInfoWindow(infoWindow, globalPoint);
+        drawWeather();
+    }
 
+    function pollution(){
+        var sContent =
+            "<div id=\"pollution\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
+        var infoWindow = new BMap.InfoWindow(sContent);
+        map.openInfoWindow(infoWindow, globalPoint);
+        drawPollution();
+    }
+
+    function temperature(){
+        var sContent =
+            "<div id=\"temperature\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
+        var infoWindow = new BMap.InfoWindow(sContent);
+        map.openInfoWindow(infoWindow, globalPoint);
+        drawTemperature();
+    }
+</script>
+
+<script type="text/javascript" language"javascript">
+    // global variable for station information
+    // change this when click on the map
+    var globalPoint = new BMap.Point(116.4, 39.92);
+    var globalIterator = 0;
+
+    function getStation(event){
+        // get the nearest station to this click event
+        current_lng = event.point.lng;
+        current_lat = event.point.lat;
+        
+        var which = -1;
+        var dist = 1000000;
+        for(var i=0; i<points[0].length; i++){
+            var temp = Math.abs(current_lng - points[0][i].lng) + Math.abs(current_lat - points[0][i].lat);
+            if(temp < dist){
+                dist = temp;
+                which = i;
+            }
+        }
+        if(which == -1){
+            which = 0;
+            alert("can not find station");
+        }
+        globalPoint.lng = points[0][which].lng;
+        globalPoint.lat = points[0][which].lat;
+        globalIterator = which;
+    }
 </script>
 
 <script>
@@ -153,18 +394,26 @@
     function showMarker(){
 
         var sContent =
-            "<div id=\"main\" style=\"height: 400px; width:800px; border: 1px solid #ccc; padding: 10px;\"></div>";
+            "<div id=\"main\" style=\"height: 200px; width:400px; border:1px solid #ccc; padding: 10px;\">"
+                + "<h1> 气象站点信息 </h1>"
+                + "<form name = \"form1\" >"
+                + "<p><input type = \"BUTTON\" value = \" 天气 \" onClick = \"weather()\"></p>"
+                + "<p><input type = \"BUTTON\" value = \" 污染 \" onClick = \"pollution()\"></p>"
+                + "<p><input type = \"BUTTON\" value = \" 温度 \" onClick = \"temperature()\"></p>"
+                + "</form>"
+             + "</div>";
         var infoWindow = new BMap.InfoWindow(sContent);
 
         for(var i=0; i<100; i++){
             var p = new BMap.Point(points[0][i].lng, points[0][i].lat);
             var station = new BMap.Marker(p);
-            station.addEventListener("rightclick", function(){          
+            station.addEventListener("rightclick", function(e){          
                 this.openInfoWindow(infoWindow);
-                drawStation();
-                document.getElementById('imgDemo').onload = function (){
-                    infoWindow.redraw();
-                }
+                getStation(e);
+                //drawStation();
+                //document.getElementById('imgDemo').onload = function (){
+                //    infoWindow.redraw();
+                //}
             });
             map.addOverlay(station);
         }
@@ -215,7 +464,7 @@
     }
 </script>
 
-<script type="text/javascript">
+<script type="text/javascript">    
     // 百度地图API功能
     var map = new BMap.Map("allmap");    // 创建Map实例
     var point = new BMap.Point(116.4, 39.92);
