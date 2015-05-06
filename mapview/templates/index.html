@@ -289,7 +289,8 @@
         var sContent =
             "<div id=\"weather\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
         var infoWindow = new BMap.InfoWindow(sContent);
-        map.openInfoWindow(infoWindow, globalPoint);
+        var drawPoint = new BMap.Point(globalPoint.lng + 0.001, globalPoint.lat + 0.001);
+        map.openInfoWindow(infoWindow, drawPoint);
         drawWeather();
     }
 
@@ -297,7 +298,8 @@
         var sContent =
             "<div id=\"pollution\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
         var infoWindow = new BMap.InfoWindow(sContent);
-        map.openInfoWindow(infoWindow, globalPoint);
+        var drawPoint = new BMap.Point(globalPoint.lng + 0.002, globalPoint.lat + 0.002);
+        map.openInfoWindow(infoWindow, drawPoint);
         drawPollution();
     }
 
@@ -305,7 +307,8 @@
         var sContent =
             "<div id=\"temperature\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
         var infoWindow = new BMap.InfoWindow(sContent);
-        map.openInfoWindow(infoWindow, globalPoint);
+        var drawPoint = new BMap.Point(globalPoint.lng + 0.003, globalPoint.lat + 0.003);
+        map.openInfoWindow(infoWindow, drawPoint);
         drawTemperature();
     }
 </script>
