@@ -7,6 +7,15 @@
     <script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
 	<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
 
+	<!-- for time slider -->
+    <script src="./static/lib/jquery/jquery-2.1.1.js"></script>
+	<script src="./static/lib/jquery-ui-1.11.4.custom/jquery-ui.js"></script>
+	<link rel="stylesheet" href="./static/lib/jquery-ui-1.11.4.custom/jquery-ui.css">
+	<script src="./static/lib/jQuery-ui-Slider-Pips-master/dist/jquery-ui-slider-pips.js"></script>
+	<link rel="stylesheet" href="./static/lib/jQuery-ui-Slider-Pips-master/dist/jquery-ui-slider-pips.css">
+	<!-- for time slider end -->
+	
+	
     <title>热力图功能示例</title>
     <style type="text/css">
 		ul,li{list-style: none;margin:0;padding:0;float:left;}
@@ -15,18 +24,9 @@ ls
 		body{height:100%;margin:0px;padding:0px;font-family:"微软雅黑";}
 		#container{height:500px;width:70%;}
 		#r-result{width:100%;}
-    </style>	
-	<script src="https://code.jquery.com/jquery-2.1.1.js"></script>
-	<script src="https://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-					
-	<!-- plus a jQuery UI theme, here I use "flick" -->
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.10.4/themes/flick/jquery-ui.css">
-
-	<script src="static/lib/jQuery-ui-Slider-Pips-master/dist/jquery-ui-slider-pips.js"></script>
-	<link rel="stylesheet" href="static/lib/jQuery-ui-Slider-Pips-master/dist/jquery-ui-slider-pips.css">
-
-    <script src="static/bootstrap/js/bootstrap.min.js"></script>
-    <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    </style>
+    <script src="./static/bootstrap/js/bootstrap.min.js"></script>
+    <link href="./static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <script type="text/javascript" src="http://developer.baidu.com/map/custom/stylelist.js"></script>
 
 	<style type="text/css">
@@ -38,12 +38,11 @@ ls
 	</style>
 	
 	<!-- data js -->
-    <script language='javascript' src="graph_data.js"></script> 
+    <script language='javascript' src="./static/js/data.js"></script> 
     <!-- echart js -->
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 	<!-- chart code -->
 	<script src="ltr.js"></script>
-
 </head>
 <body>
 	<div id="r-result">
@@ -66,7 +65,6 @@ ls
 	
 </body>
 </html>
-<!-- <script language='javascript' src="static/js/data.js"></script>  -->
 
 
 
@@ -130,107 +128,9 @@ ls
     }
 	closeHeatmap();
 </script>
-<script>
-		var dates;  //date数组，各pip对应时间点
-		var selectedIndex; //当前pip对应时间点在dates中的下标
-		var pips;   //pip总点数
-		function mycallback(value)
-		{
-			//dates[value];
-			heatmapOverlay.setDataSet({data:points[value],max:100});
-			selectedIndex = value;
-		}
-		
-		function show(labels, selectedIndex)
-		{	
-			$(".slider").slider({
-				min: 0,
-				max: pips-1,
-				step: 1,
-				value: selectedIndex
-			})
-		    .slider("pips", {
-		        callback: mycallback,
-		        labels: labels,
-		        rest: "label"
-		    });
-		}
-		
-		function scale(startTime, endTime, step_ms, selectTime)
-		{
-			var start= startTime.getTime();
-			var end= endTime.getTime();
-			var select= selectTime.getTime();	
-			//alert(start/3600/1000+" "+end/3600/1000 + " "+select/3600/1000)
-			pips=0;
-			selectedIndex= -1;
-			temp = 0;
-			dates= new Array();
-			while (start < end)
-			{
-				var date= new Date();
-				date.setTime(start);
-				dates[pips]= date;
-				
-				pips++;
-				start += step_ms;
-				
-				if (select < start && temp==0)
-				{
-					selectedIndex= pips-1;
-					temp =1;
-				}
-			}
-			//alert(pips)
-			if (selectedIndex == -1)
-				selectedIndex = pips-1;
-			
-			
-			var labels= new Array();
-			var labelstep= 5;
-			for (var i=0; i<pips; i++)
-			{
-				if (i%5==0)
-					labels[i]= dates[i].toTimeString().substring(0,5);
-				else
-					labels[i]="";
-			}
-			
-			show(labels, selectedIndex);
-		}	
-		var startTime= new Date();
-		var start= startTime.getTime();
-		startTime.setTime(start-3600*1000*100);
-		
-		var endTime= new Date();
-		
-		var selectTime= endTime;
-		
-		scale(startTime, endTime, 3600*1000, selectTime);
-	</script>
-<script type="text/javascript">
-function handle(delta) {
-	var startTime = new Date();
-	var endTime = new Date();
+
 	
-	startTime.setTime(dates[0].getTime()-delta*1000*60*60);
-	endTime.setTime(dates[pips-1].getTime()+delta*1000*60*60);
-	//alert(dates[selectedIndex]);
-	scale(startTime, endTime, 3600*1000, dates[selectedIndex])
-
-}
-function showKey(){
-    var delta = 0;
-    if (event.wheelDelta) {
-        delta = event.wheelDelta/120; 
-        if (window.opera) delta = -delta;
-    } else if (event.detail) {
-        delta = -event.detail/3;
-    }
-    if (delta)
-        handle(delta);
-}
-
+<script type="text/javascript">
     /********缩略图********/
     var mapType1 = new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP,BMAP_HYBRID_MAP]});
     var mapType2 = new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT});
@@ -254,3 +154,112 @@ function showKey(){
     }*/
 
 </script>
+
+<!--for time slider-->
+<script>
+		var dates_ms;  //date数组，各pip对应时间点
+		var selected_ms; //当前pip对应时间点在dates中的下标
+		var pips;   //pip总点数
+		var hour_ms= 3600*1000;
+		
+		function mycallback(value)
+		{
+			selected_ms = dates_ms[value];
+			heatmapOverlay.setDataSet({data:points[value],max:100});
+		}
+		
+		function show(labels, selectedIndex)
+		{	
+			$(".slider").slider({
+				min: 0,
+				max: pips-1,
+				step: 1,
+				value: selectedIndex
+			})
+		    .slider("pips", {
+		        callback: mycallback,
+		        labels: labels,
+		        rest: "label"
+		    });
+		}
+		
+		function scale(startTime_ms, endTime_ms, step_ms, selectTime_ms)
+		{
+			pips=0;
+			dates_ms= new Array();  
+			
+			while (startTime_ms < endTime_ms)
+			{
+				dates_ms[pips]= startTime_ms;
+				
+				pips++;
+				startTime_ms += step_ms;
+			}
+			
+			
+			var selectedIndex= -1;
+			for (var i=0; i<pips; ++i)
+				if (dates_ms[i] >= selectTime_ms)
+				{
+					selectedIndex = i;
+					break ;
+				}
+			
+			if (selectedIndex == -1)
+				selectedIndex = pips-1;
+			
+			
+			var labels= new Array();
+			var labelstep= 5;             //
+			for (var i=0; i<pips; i++)
+			{
+				if (i%5==0)
+				{
+					var date= new Date();
+					date.setTime(dates_ms[i]);
+					
+					labels[i]= date.toTimeString().substring(0,5);
+				}
+				else
+					labels[i]="";
+			}
+			
+			show(labels, selectedIndex);
+		}	
+		
+		function init()
+		{
+			var curTime= new Date();
+			var curTime_ms= curTime.getTime();
+			
+			scale(curTime_ms-hour_ms*100, curTime_ms, hour_ms, curTime_ms);
+		}
+		
+		init();
+</script>
+	
+<script type="text/javascript">
+	function handle(delta) 
+	{
+		scale(dates_ms[0]-delta*hour_ms, dates_ms[pips-1]+delta*hour_ms, hour_ms, selected_ms)
+	}
+	
+	function showKey()
+	{
+	    var delta = 0;
+	    if (event.wheelDelta) 
+	    {
+	        delta = event.wheelDelta/120; 
+	        if (window.opera) 
+	        	delta = -delta;
+	    } 
+	    else if (event.detail) 
+	    {
+	        delta = -event.detail/3;
+	    }
+	    
+	    if (delta)
+	        handle(delta);
+	}
+</script>
+<!--for time slider end-->
