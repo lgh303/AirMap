@@ -41,11 +41,12 @@ ls
     <!-- echart js -->
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 	<!-- chart code -->
-	<script src="ltr.js"></script>
+	<script src="./static/js/ltr.js"></script>
 
-    <script src="overlayctrl.js"></script>
-    <script src="airmapinit.js"></script>
+    <script src="./static/js/airmapctrl.js"></script>
+    <script src="./static/js/airmapinit.js"></script>
 </head>
+
 <body>
 	<div id="r-result">
 		<div class="optionpanel">
@@ -80,32 +81,6 @@ ls
  init_airmap();
  init_marker();
  init_overlay();
- changeMapStyle('midnight')
-
-function changeMapStyle(style){
-	map.setMapStyle({style:style});
-	$('#desc').html(mapstyles[style].desc);
-}
-
-function theLocation(){
-	var city = document.getElementById("cityName").value;
-	alert(city);
-	if(city != ""){
-		map.centerAndZoom(city,11);      // 用城市名设置地图中心点
-		var myGeo = new BMap.Geocoder();
-		myGeo.getPoint(city, function(point){
-			var marker = new BMap.Marker(point);  // 创建标注
-			map.addOverlay(marker);               // 将标注添加到地图中
-			marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-		});
-	}
-}
-function openHeatmap(){
-    heatmapOverlay.show();
-}
-function closeHeatmap(){
-    heatmapOverlay.hide();
-}
 
 </script>
 

@@ -29,13 +29,10 @@ function init_marker() {
 }
 
 function init_overlay() {
-    map.addEventListener("zoomend", function() {
-        var pixel_radius = pixel_step(0.003, 0.003);
-        heatmapOverlay.setOptions({"radius":pixel_radius});
-    });
-
+    map.addEventListener("zoomend", zoomed_callback);
     map.addOverlay(heatmapOverlay);
     heatmapOverlay.setDataSet({data:points[0],max:100});
+    changeMapStyle('midnight')
 }
 
 function init_timeline() {
