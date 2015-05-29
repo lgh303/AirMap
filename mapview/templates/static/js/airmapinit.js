@@ -29,9 +29,10 @@ function init_marker() {
 }
 
 function init_overlay() {
-    map.addEventListener("zoomend", zoomed_callback);
     map.addOverlay(heatmapOverlay);
+    map.addEventListener("zoomend", zoomed_callback);
     heatmapOverlay.setDataSet({data:points[0],max:100});
+    heatmapOverlay.setOptions({"radius" : get_radius()});
     changeMapStyle('midnight')
 }
 
@@ -56,10 +57,4 @@ function init_overview() {
     var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
     map.addControl(overView);          //添加默认缩略地图控件
     map.addControl(overViewOpen);      //右下角，打开
-}
-
-function airmap_init() {
-    init_map();
-    init_timeline();
-    init_littlemap();
 }
