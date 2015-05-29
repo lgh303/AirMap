@@ -16,8 +16,26 @@ function init_airmap() {
     map.enableScrollWheelZoom(); // 允许滚轮缩放
 	map.disable3DBuilding();
 
-    var center_point = new BMap.Point(116.4, 39.92);
-    map.centerAndZoom(center_point, 15);             // 初始化地图，设置中心点坐标和地图级别
+    map.centerAndZoom(new BMap.Point(116.4, 39.92), 15);             // 初始化地图，设置中心点坐标和地图级别
+}
+
+function init_marker() {
+    // defined in ltr.js
+	map.addEventListener("click", function(e){
+        onLeftClick(e);
+    });
+    setRightClickMenu();
+    showMarker();
+}
+
+function init_overlay() {
+    map.addEventListener("zoomend", function() {
+        var pixel_radius = pixel_step(0.003, 0.003);
+        heatmapOverlay.setOptions({"radius":pixel_radius});
+    });
+
+    map.addOverlay(heatmapOverlay);
+    heatmapOverlay.setDataSet({data:points[0],max:100});
 }
 
 function init_timeline() {
