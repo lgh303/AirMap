@@ -39,8 +39,19 @@ function init_timeline() {
 
 }
 
-function init_littlemap() {
+function init_typectrl() {
+    var mapType1 = new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP,BMAP_HYBRID_MAP]});
+    var mapType2 = new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT});
+    map.addControl(mapType1);          //2D图，卫星图
+    map.addControl(mapType2);          //左上角，默认地图控件
+    map.setCurrentCity("北京");        //由于有3D图，需要设置城市哦
+}
 
+function init_overview() {
+    var overView = new BMap.OverviewMapControl();
+    var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
+    map.addControl(overView);          //添加默认缩略地图控件
+    map.addControl(overViewOpen);      //右下角，打开
 }
 
 function airmap_init() {
