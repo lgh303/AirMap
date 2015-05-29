@@ -20,7 +20,7 @@ function init_airmap() {
 }
 
 function init_marker() {
-    // defined in ltr.js
+    // defined in marker.js
 	map.addEventListener("click", function(e){
         onLeftClick(e);
     });
@@ -35,8 +35,12 @@ function init_overlay() {
     changeMapStyle('midnight')
 }
 
-function init_timeline() {
-
+function init_timeline()
+{
+    var hour_ms= 3600*1000;
+	var curTime= new Date();
+	var curTime_ms= curTime.getTime();
+	scale_timeline(curTime_ms-hour_ms*100, curTime_ms, hour_ms, curTime_ms);
 }
 
 function init_typectrl() {
