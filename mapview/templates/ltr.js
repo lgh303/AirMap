@@ -382,7 +382,7 @@
              + "</div>";
         var infoWindow = new BMap.InfoWindow(sContent);
 
-        for(var i=0; i<100; i++){
+        for(var i=0; i<points[0].length; i++){
             var p = new BMap.Point(points[0][i].lng, points[0][i].lat);
             var station = new BMap.Marker(p);
             station.addEventListener("rightclick", function(e){          

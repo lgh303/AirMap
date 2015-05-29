@@ -43,6 +43,8 @@ ls
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 	<!-- chart code -->
 	<script src="ltr.js"></script>
+
+    <script src="airmapinit.js"></script>
 </head>
 <body>
 	<div id="r-result">
@@ -69,6 +71,10 @@ ls
 
 
 <script type="text/javascript">
+ $(document).ready(function () {
+     airmap_init();
+ });
+
 	//初始化模板选择的下拉框
 	var sel = document.getElementById('stylelist');
 	for(var key in mapstyles){
@@ -79,22 +85,22 @@ ls
 
     var map = new BMap.Map("allmap");          // 创建地图实例
 
-    var point = new BMap.Point(116.4, 39.92);
-
 	map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
 	map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
 	map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
+	map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
 
     map.enableScrollWheelZoom(); // 允许滚轮缩放
-
-	map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
 	map.disable3DBuilding();
+
+    var point = new BMap.Point(116.4, 39.92);
     map.centerAndZoom(point, 15);             // 初始化地图，设置中心点坐标和地图级别
 	
 	map.addEventListener("click", function(e){onLeftClick(e);}  );      //鼠标左键事件
     setRightClickMenu();              //地图右键菜单
     showMarker();                       //显示标记点
 	var heatmapOverlay;
+
     showHeatMap();                      //显示热力图
 
 	changeMapStyle('midnight')
@@ -118,7 +124,6 @@ ls
 		}
 	}
 	
-	t=1;
 	//是否显示热力图
     function openHeatmap(){
         heatmapOverlay.show();
@@ -126,7 +131,6 @@ ls
 	function closeHeatmap(){
         heatmapOverlay.hide();
     }
-	closeHeatmap();
 </script>
 
 	
