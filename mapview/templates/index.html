@@ -68,11 +68,9 @@ ls
 
 
 <script type="text/javascript">
- //初始化模板选择的下拉框
- var stylelist = document.getElementById('stylelist');
- init_mapstylelist(stylelist);
+ init_mapstylelist(document.getElementById('stylelist'));
 
-    var map = new BMap.Map("allmap");          // 创建地图实例
+    var map = new BMap.Map("allmap");
 
 	map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
 	map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
