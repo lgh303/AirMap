@@ -17,6 +17,16 @@ function init_airmap() {
 	map.disable3DBuilding();
 
     map.centerAndZoom(new BMap.Point(116.4, 39.92), 15);             // 初始化地图，设置中心点坐标和地图级别
+    map.addEventListener("dragend", function(){    
+        var center = map.getCenter();
+        //alert("地图中心点变更为：" + center.lng + ", " + center.lat);    
+        var bound = map.getBound();
+        setDataWindow(bound.ve, bound.we, bound.qe, bound.re);
+    });
+    map.addEventListener("zoomend", function(){    
+        var bound = map.getBound();
+        setDataWindow(bound.ve, bound.we, bound.qe, bound.re);
+    });
 }
 
 function init_marker() {
