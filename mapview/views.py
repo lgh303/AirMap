@@ -25,5 +25,17 @@ def index(request):
         if action_type == 'getdata' :
             return get_data(request)
     return render_to_response(
-        'index.html', {
+        'map_view.html', {
+            })
+def new_index(request):
+    return render_to_response(
+        'new_index.html', {
+            })
+def about(request):
+    return render_to_response(
+        'about.html', {
+            })
+def contact(request):
+    return render_to_response(
+        'contact.html', {
             })

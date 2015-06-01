@@ -20,12 +20,12 @@ function init_airmap() {
     map.addEventListener("dragend", function(){    
         var center = map.getCenter();
         //alert("地图中心点变更为：" + center.lng + ", " + center.lat);    
-        var bound = map.getBound();
-        setDataWindow(bound.ve, bound.we, bound.qe, bound.re);
+        var bound = map.getBounds();
+        setFrame(bound.we, bound.re, bound.ve, bound.qe);
     });
     map.addEventListener("zoomend", function(){    
-        var bound = map.getBound();
-        setDataWindow(bound.ve, bound.we, bound.qe, bound.re);
+        var bound = map.getBounds();
+        setFrame(bound.we, bound.re, bound.ve, bound.qe);
     });
 }
 
@@ -70,5 +70,6 @@ function init_overview() {
 function init_dataset() {
 	cur_data_type = 3;
 	cur_time_ms = new Date().getTime();
-	setFrame(116.3, 116.5, 39.85, 39.95);
+	var bound = map.getBounds();
+    setFrame(bound.we, bound.re, bound.ve, bound.qe);
 }

@@ -25,7 +25,7 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 			for (var i=0, lat=lat_min; i<lat_npoints; ++i, lat+=lat_step)
 				for (var j=0, lng=lng_min; j<lng_npoints; ++j, lng+=lng_step)
 					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j]});
-			
+				
 			callback(framePoints);
 		}
 	}

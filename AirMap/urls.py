@@ -7,4 +7,7 @@ urlpatterns = patterns(
     '',
     (r'^dataServer$', 'mapview.database.dataServer'),
     (r'^$', 'mapview.views.index'),
+    (r'^new_index/$', 'mapview.views.new_index'),
+    (r'^about/$', 'mapview.views.about'),
+    (r'^contact/$', 'mapview.views.contact'),
 ) + static(settings.STATIC_URL)
