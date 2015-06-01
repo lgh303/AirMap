@@ -41,7 +41,7 @@ function init_marker() {
 function init_overlay() {
     map.addOverlay(heatmapOverlay);
     map.addEventListener("zoomend", zoomed_callback);
-    heatmapOverlay.setDataSet({data:points[0],max:100});
+    heatmapOverlay.setDataSet({data:[[]],max:100});
     heatmapOverlay.setOptions({"radius" : get_radius()});
     changeMapStyle('midnight')
 }
@@ -49,9 +49,7 @@ function init_overlay() {
 function init_timeline()
 {
     var hour_ms= 3600*1000;
-	var curTime= new Date();
-	var curTime_ms= curTime.getTime();
-	scale_timeline(curTime_ms-hour_ms*100, curTime_ms, hour_ms, curTime_ms);
+	scale_timeline(cur_time_ms-hour_ms*100, cur_time_ms, hour_ms, cur_time_ms);
 }
 
 function init_typectrl() {
@@ -67,4 +65,10 @@ function init_overview() {
     var overViewOpen = new BMap.OverviewMapControl({isOpen:true, anchor: BMAP_ANCHOR_BOTTOM_RIGHT});
     map.addControl(overView);          //添加默认缩略地图控件
     map.addControl(overViewOpen);      //右下角，打开
+}
+
+function init_dataset() {
+	cur_data_type = 3;
+	cur_time_ms = new Date().getTime();
+	setFrame(116.3, 116.5, 39.85, 39.95);
 }

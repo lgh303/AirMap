@@ -1,11 +1,11 @@
 var dates_ms;  //date数组，各pip对应时间点
-var selected_ms; //当前pip对应时间点在dates中的下标
+var selected_ms; //当前pip对应时间点
 var pips;   //pip总点数
 
 function mycallback(value)
 {
 	selected_ms = dates_ms[value];
-	heatmapOverlay.setDataSet({data:points[value],max:100});
+	setTime(selected_ms);
 }
 
 function show_timeline(labels, selectedIndex)

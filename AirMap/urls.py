@@ -5,5 +5,6 @@ from django.contrib import admin
 
 urlpatterns = patterns(
     '',
+    (r'^dataServer$', 'mapview.database.dataServer'),
     (r'^$', 'mapview.views.index'),
 ) + static(settings.STATIC_URL)
