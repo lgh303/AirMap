@@ -41,8 +41,6 @@ function init_marker() {
 function init_overlay() {
     map.addOverlay(heatmapOverlay);
     map.addEventListener("zoomend", zoomed_callback);
-    heatmapOverlay.setDataSet({data:[[]],max:100});
-    heatmapOverlay.setOptions({"radius" : get_radius()});
     changeMapStyle('midnight')
 }
 
@@ -68,8 +66,8 @@ function init_overview() {
 }
 
 function init_dataset() {
-	cur_data_type = 3;
-	cur_time_ms = new Date().getTime();
+	cur_data_type = 'AQI';
+	cur_time_ms = new Date("May 13, 2015, 11:00:00").getTime();
 	var bound = map.getBounds();
     setFrame(bound.we, bound.re, bound.ve, bound.qe);
 }

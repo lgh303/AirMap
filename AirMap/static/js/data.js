@@ -1,5 +1,7 @@
 var cur_lat_min, cur_lat_max, cur_lng_min, cur_lng_max, cur_data_type, cur_time_ms;
-var lat_npoints=40, lng_npoints=30;  //----
+var lat_npoints=30, lng_npoints=40;  //----
+
+var stamp_sended=0, stamp_recved=0, stamp_ploted=0;
 
 function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callback)
 {
@@ -17,6 +19,8 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 	{
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
+			stamp_recved= new Date().getTime();
+			
 			var responseObj = JSON.parse(xmlhttp.responseText);
 			var values= responseObj.values;
 			
@@ -25,8 +29,13 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 			for (var i=0, lat=lat_min; i<lat_npoints; ++i, lat+=lat_step)
 				for (var j=0, lng=lng_min; j<lng_npoints; ++j, lng+=lng_step)
 					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j]});
-				
+			
 			callback(framePoints);
+			
+			stamp_ploted= new Date().getTime();
+			
+			//alert(	"from sended to recved, cost: "+ (stamp_recved-stamp_sended)+" ms\n"+
+				//	"from recved to ploted, cost: "+ (stamp_ploted-stamp_recved)+" ms\n");
 		}
 	}
 	
@@ -36,13 +45,14 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 		true
 		);
 	xmlhttp.send();
+	stamp_sended = new Date().getTime();
 }
 
 function pullDataCallback(framePoints)
 {
 	var frames= [framePoints];
 	heatmapOverlay.setDataSet({data:frames[0],max:100});
-	heatmapOverlay.setOptions({"radius" : 30});             //-----
+	heatmapOverlay.setOptions({"radius" : 50});             //-----
 }
 
 function refresh()
