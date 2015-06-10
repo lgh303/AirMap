@@ -46,8 +46,7 @@ function init_overlay() {
 
 function init_timeline()
 {
-    var hour_ms= 3600*1000;
-	scale_timeline(cur_time_ms-hour_ms*100, cur_time_ms, hour_ms, cur_time_ms);
+	scale_timeline(cur_time_ms-hour_ms*24, cur_time_ms, hour_ms, cur_time_ms);
 }
 
 function init_typectrl() {
@@ -67,7 +66,8 @@ function init_overview() {
 
 function init_dataset() {
 	cur_data_type = 'AQI';
-	cur_time_ms = new Date("May 13, 2015, 11:00:00").getTime();
+	cur_time_ms = new Date("May 13, 2015, 0:00:00").getTime();
+	setTimeBound();
 	var bound = map.getBounds();
     setFrame(bound.we, bound.re, bound.ve, bound.qe);
 }

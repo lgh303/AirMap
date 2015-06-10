@@ -2,6 +2,41 @@ var dates_ms;  //date数组，各pip对应时间点
 var selected_ms; //当前pip对应时间点
 var pips;   //pip总点数
 
+var hour_ms= 3600*1000;
+
+var maxTime_ms;
+var minTime_ms;
+
+function setTimeBound()
+{
+	var xmlhttp;
+	if (window.XMLHttpRequest)
+	{
+		xmlhttp = new XMLHttpRequest();
+	}
+	else
+	{
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	}
+		
+	xmlhttp.onreadystatechange=function()
+	{
+		if (xmlhttp.readyState==4 && xmlhttp.status==200)
+		{
+			var responseObj = JSON.parse(xmlhttp.responseText);
+			minTime_ms = responseObj.minTime_ms;
+			maxTime_ms = responseObj.maxTime_ms;
+		}
+	}
+	
+	xmlhttp.open(
+		"GET",
+		"dataServer?request_type=getTimeBound",
+		true
+		);
+	xmlhttp.send();
+}
+
 function mycallback(value)
 {
 	selected_ms = dates_ms[value];
@@ -25,6 +60,20 @@ function show_timeline(labels, selectedIndex)
 
 function scale_timeline(startTime_ms, endTime_ms, step_ms, selectTime_ms)
 {
+	//alert('scale_timeline\n'+'start: '+startTime_ms+'\nmin: '+minTime_ms+'\nstart<min: '+(startTime_ms<minTime_ms)+'\nend: '+endTime_ms+'\nmax: '+
+		//maxTime_ms+'\nend>max:'+(endTime_ms>maxTime_ms)+'\n\nend: '+new Date(endTime_ms)+'\nmax: '+new Date(maxTime_ms));
+	if (startTime_ms < minTime_ms)
+	{
+		alert('out of lower bound, reset to: \n' + new Date(minTime_ms) + '\origin: \n'+ new Date(startTime_ms));
+		startTime_ms = minTime_ms;
+	}
+	
+	if (endTime_ms > maxTime_ms)
+	{
+		alert('out of upper bound, reset to: \n' + new Date(maxTime_ms) + '\norigin: \n'+ new Date(endTime_ms));
+		endTime_ms = maxTime_ms;
+	}
+	
 	pips=0;
 	dates_ms= new Array();  
 	
@@ -62,6 +111,7 @@ function scale_timeline(startTime_ms, endTime_ms, step_ms, selectTime_ms)
 		}
 		else
 			labels[i]="";
+		
 	}
 	
 	show_timeline(labels, selectedIndex);
@@ -77,7 +127,7 @@ function showKey()
 	var delta = 0;
 	if (event.wheelDelta) 
 	{
-	    delta = event.wheelDelta/120; 
+	    delta = event.wheelDelta/120*10; 
 	    if (window.opera) 
 	        delta = -delta;
 	} 
@@ -89,3 +139,19 @@ function showKey()
 	if (delta)
 	    handle_timeline(delta);
 }
+
+function shiftTimeInterval(delta)
+{
+	scale_timeline(dates_ms[0]+delta*hour_ms, dates_ms[pips-1]+delta*hour_ms, hour_ms, selected_ms)
+}
+
+function shiftTimeIntervalLeft()
+{
+	shiftTimeInterval(-2);
+}
+
+function shiftTimeIntervalRight()
+{
+	shiftTimeInterval(2);
+}
+

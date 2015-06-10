@@ -41,7 +41,7 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 	
 	xmlhttp.open(
 		"GET",
-		"dataServer?lat_min="+lat_min+"&lat_max="+lat_max+"&lng_min="+lng_min+"&lng_max="+lng_max+"&lat_npoints="+lat_npoints+"&lng_npoints="+lng_npoints+"&data_type="+data_type+"&time_ms="+time_ms,
+		"dataServer?request_type=getPoints&lat_min="+lat_min+"&lat_max="+lat_max+"&lng_min="+lng_min+"&lng_max="+lng_max+"&lat_npoints="+lat_npoints+"&lng_npoints="+lng_npoints+"&data_type="+data_type+"&time_ms="+time_ms,
 		true
 		);
 	xmlhttp.send();
