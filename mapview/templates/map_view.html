@@ -45,12 +45,12 @@
     <script src="http://developer.baidu.com/map/custom/stylelist.js"></script>
     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
 
+    <script src="../static/js/radio.js"></script>
     <script src="../static/js/data.js"></script> 
 	<script src="../static/js/marker.js"></script>
     <script src="../static/js/timeline.js"></script>
     <script src="../static/js/airmapctrl.js"></script>
     <script src="../static/js/airmapinit.js"></script>
-    <script src="../static/js/radio.js"></script>
     
     <style type="text/css">
 	 ul,li{list-style: none;margin:0;padding:0;float:left;}
@@ -135,11 +135,12 @@
           </div>
           <div id="colorbar" style="position:absolute;top:30%;left:88%;z-index:5;">
             <div style="float:left; margin-left:20px" id="line">
-                <img src="static/image/colorbar.png" height="210px" width="40px"></img>
+              <canvas id="lineGradient" width="40px" height="210px">
+                <!-- <img src="static/image/colorbar.png" height="210px" width="40px"></img> -->
             </div>
             <div style="float:left;  height=210px; width=50px;">
-                <div style="float:top   ; margin-top:0px"  ><p id="top_content" style="color:yellow">严重污染</p></div>
-                <div style="float:bottom; margin-top:220px"><p id="bot_content" style="color:yellow">轻度污染</p></div>
+                <div style="float:top   ; margin-top:0px"  ><p id="top_content" style="color:yellow">轻度污染</p></div>
+                <div style="float:bottom; margin-top:220px"><p id="bot_content" style="color:yellow">严重污染</p></div>
             </div>
           </div>
 				</div>
@@ -185,4 +186,5 @@
  init_overview();
  init_dataset();
  init_timeline();
+ init_radio_draw();
 </script>

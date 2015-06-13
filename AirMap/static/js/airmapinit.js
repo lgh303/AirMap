@@ -69,3 +69,8 @@ function init_dataset() {
 	var bound = map.getBounds();
     setFrame(bound.we, bound.re, bound.ve, bound.qe);
 }
+
+function init_radio_draw() {
+    cur_gradient = aqi_gradient;
+    radio_draw();
+}

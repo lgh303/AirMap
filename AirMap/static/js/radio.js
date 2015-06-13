@@ -8,28 +8,50 @@ function change_datatype(event) {
     var bot = document.getElementById("bot_content").innerHTML
     switch(cur_data_type){
         case "AQI":
-            top = "严重污染";
-            bot = "轻度污染";
+            bot = "严重污染";
+            top = "轻度污染";
+            cur_gradient = aqi_gradient;
             break;
         case "temperature":
-            top = "高温";
-            bot = "低温";
+            bot = "高温";
+            top = "低温";
+            cur_gradient = temper_gradient;
             break;
         case "wind":
-            top = "大风";
-            bot = "小风";
+            bot = "大风";
+            top = "小风";
+            cur_gradient = wind_gradient;
             break;
         case "humid":
-            top = "干旱";
             bot = "潮湿";
+            top = "干旱";
+            cur_gradient = humid_gradient;
             break;
         case "rain":
-            top = "小雨";
             bot = "大雨";
+            top = "小雨";
+            cur_gradient = rain_gradient;
             break;
     }
     document.getElementById("top_content").innerHTML = top;
     document.getElementById("bot_content").innerHTML = bot;
     if (type_changed)
+    {
+        radio_draw();
         refresh();
+    }
+}
+
+function radio_draw() {
+    var canvas = document.getElementById('lineGradient');
+    if ( ! canvas || ! canvas.getContext ) { return false; }
+    var ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    var grad  = ctx.createLinearGradient(0,0, 0,140);
+    for(var key in cur_gradient){
+        grad.addColorStop(key,cur_gradient[key]);
+    }
+    ctx.fillStyle = grad;
+    ctx.rect(0,0, 40, 210);
+    ctx.fill();
 }

@@ -1,7 +1,13 @@
-var cur_lat_min, cur_lat_max, cur_lng_min, cur_lng_max, cur_data_type, cur_time_ms;
+var cur_lat_min, cur_lat_max, cur_lng_min, cur_lng_max, cur_data_type, cur_time_ms, cur_gradient;
 var lat_npoints=30, lng_npoints=40;  //----
 
 var stamp_sended=0, stamp_recved=0, stamp_ploted=0;
+
+var aqi_gradient = { 0 : 'rgb(0,0,255)', 0.4: 'rgb(0, 255, 255)', 0.8 : 'rgb(255,255,0)', 1 : 'rgb(255,0,0)'};
+var temper_gradient = { 0 : 'rgb(255,0,255)', 0.5 : 'rgb(0,255,0)', 1 : 'rgb(0,0,0)'};
+var wind_gradient = { 0 : 'rgb(0,0,255)', 0.5 : 'rgb(0,255,0)', 1 : 'rgb(255,0,0)'};
+var humid_gradient = { 0 : 'rgb(250,0,0)', 0.8 : 'rgb(0,255,255)', 1 : 'rgb(0,0,255)'};
+var rain_gradient = { 0 : 'rgb(0,0,0)', 0.5 : 'rgb(0,255,0)', 1 : 'rgb(255, 0, 0)'};
 
 function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callback)
 {
@@ -28,29 +34,32 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 			var framePoints= new Array();
 			var lat_step= (lat_max-lat_min)/lat_npoints,  lng_step= (lng_max-lng_min)/lng_npoints;
 
-            var value_offset = 0, value_range = 500;
+            var value_offset = 0, value_range = 500, value_factor = 1;;
             switch(cur_data_type)
             {
             case "AQI":
                 break;
             case "temperature":
-                value_offset = -13;
+                value_offset = -10;
                 value_range = 30;
                 break;
             case "wind":
+                value_offset = 0;
+                value_range = 10;
                 break;
             case "humid":
                 value_offset = 0;
                 value_range = 100;
                 break;
             case "rain":
+                value_factor = 100;
                 value_offset = 0;
-                value_range = 1;
+                value_range = 100;
                 break;
             }
 			for (var i=0, lat=lat_min; i<lat_npoints; ++i, lat+=lat_step)
 				for (var j=0, lng=lng_min; j<lng_npoints; ++j, lng+=lng_step)
-					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j] + value_offset});
+					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j] * value_factor + value_offset});
 
 			callback(framePoints, value_range);
 			
@@ -74,6 +83,7 @@ function pullDataCallback(framePoints, value_range)
 {
 	heatmapOverlay.setDataSet({data:framePoints,max:value_range});
 	heatmapOverlay.setOptions({"radius" : get_radius()});             //-----
+	heatmapOverlay.setOptions({"gradient" : cur_gradient});             //-----
 }
 
 function refresh()
