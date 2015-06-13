@@ -20,8 +20,9 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 		if (xmlhttp.readyState==4 && xmlhttp.status==200)
 		{
 			stamp_recved= new Date().getTime();
-			var responseText = xmlhttp.responseText.replace(/NaN/g, "0.003");
+			var responseText = xmlhttp.responseText.replace(/NaN/g, "0.03");
 			var responseObj = JSON.parse(responseText);
+            console.log(responseText);
 			var values= responseObj.values;
 
 			var framePoints= new Array();
@@ -50,8 +51,7 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 
 function pullDataCallback(framePoints)
 {
-    console.log(framePoints);
-	heatmapOverlay.setDataSet({data:framePoints,max:100});
+	heatmapOverlay.setDataSet({data:framePoints,max:500});
 	heatmapOverlay.setOptions({"radius" : get_radius()});             //-----
 }
 
@@ -62,7 +62,7 @@ function refresh()
 
 function setFrame(lng_min, lng_max, lat_min, lat_max)
 {
-    // var margin_percent = 0.25;
+    // var margin_percent = 0.1;
     // var lat_diff = (lat_max - lat_min) * margin_percent;
     // var lng_diff = (lng_max - lng_min) * margin_percent;
 	// cur_lat_min= lat_min - lat_diff;

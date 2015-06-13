@@ -51,11 +51,8 @@ function init_timeline()
 }
 
 function init_typectrl() {
-    var mapType1 = new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP,BMAP_HYBRID_MAP]});
-    var mapType2 = new BMap.MapTypeControl({anchor: BMAP_ANCHOR_TOP_LEFT});
-    map.addControl(mapType1);          //2D图，卫星图
-    map.addControl(mapType2);          //左上角，默认地图控件
-    map.setCurrentCity("北京");        //由于有3D图，需要设置城市哦
+    var mapType1 = new BMap.MapTypeControl({mapTypes: [BMAP_HYBRID_MAP]});
+    map.addControl(mapType1);
 }
 
 function init_overview() {
@@ -67,7 +64,7 @@ function init_overview() {
 
 function init_dataset() {
 	cur_data_type = 'AQI';
-	cur_time_ms = new Date("May 12, 2015, 0:00:00").getTime();
+	cur_time_ms = new Date("May 12, 2015, 20:00:00").getTime();
 	setTimeBound();
 	var bound = map.getBounds();
     setFrame(bound.we, bound.re, bound.ve, bound.qe);
