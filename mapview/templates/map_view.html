@@ -127,22 +127,19 @@
 				<div id = "test2" style = "position:absolute; left:0px; top:0px;width:100%;height:100%;z-index:0">
 					<div id="allmap"   style = "width:100%;height:100%"  ></div>
           <div style="position:absolute;left:90%;top:10%;width:60%;z-index:6;">
-                <input type="radio" name="data_type" id="option" value="AQI" checked onclick="change_datatype()" >AQI<br>
-                <input type="radio" name="data_type" id="option" value="temperature" onclick="change_datatype()">temperature<br>
-                <input type="radio" name="data_type" id="option" value="wind"  onclick="change_datatype()">wind<br>
-                <input type="radio" name="data_type" id="option" value="humid" onclick="change_datatype()">humid<br>
-                <input type="radio" name="data_type" id="option" value="rain"  onclick="change_datatype()">rain<br>
+                <input type="radio" name="data_type" id="option" value="AQI" checked onclick="change_datatype()" ><label style="color:yellow">AQI</label><br>
+                <input type="radio" name="data_type" id="option" value="temperature" onclick="change_datatype()"><label style="color:yellow">temperature</label><br>
+                <input type="radio" name="data_type" id="option" value="wind"  onclick="change_datatype()"><label style="color:yellow">wind</label><br>
+                <input type="radio" name="data_type" id="option" value="humid" onclick="change_datatype()"><label style="color:yellow">humid</label><br>
+                <input type="radio" name="data_type" id="option" value="rain"  onclick="change_datatype()"><label style="color:yellow">rain</label><br>
           </div>
-          <!--div style="float:left">
-            <img src="/Users/linzichuan/Desktop/color.png" height="210px" width="260px"></img>
-          </div-->
-          <div id="colorbar" style="position:absolute;top:25%;left:90%;z-index:5;">
+          <div id="colorbar" style="position:absolute;top:30%;left:88%;z-index:5;">
             <div style="float:left; margin-left:20px" id="line">
                 <img src="static/image/colorbar.png" height="210px" width="40px"></img>
             </div>
             <div style="float:left;  height=210px; width=50px;">
-                <div style="float:top   ; margin-top:0px"  ><p id="top_content">潮湿</p></div>
-                <div style="float:bottom; margin-top:220px"><p id="bot_content">干旱</p></div>
+                <div style="float:top   ; margin-top:0px"  ><p id="top_content" style="color:yellow">严重污染</p></div>
+                <div style="float:bottom; margin-top:220px"><p id="bot_content" style="color:yellow">轻度污染</p></div>
             </div>
           </div>
 				</div>
