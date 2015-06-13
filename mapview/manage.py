@@ -165,7 +165,7 @@ def database_read(_time, _type, min_lat, min_lng, max_lat, max_lng, lat_npoints,
             max_lat_iter = lat_npoints - 1
             h = (float(max_lat) - const_min_latitude) / (const_max_latitude - const_min_latitude) * float(const_latitude_npoints - 1)
         else:
-            max_lat_iter = int(floor((const_min_latitude - min_lat) * float(lat_npoints - 1) / (max_lat - min_lat)))
+            max_lat_iter = int(floor((const_max_latitude - min_lat) * float(lat_npoints - 1) / (max_lat - min_lat)))
             lat = min_lat + float(max_lat_iter) / float(lat_npoints - 1) * (max_lat - min_lat)
             h = (float(lat) - const_min_latitude) / (const_max_latitude - const_min_latitude) * float(const_latitude_npoints - 1)
 
@@ -181,7 +181,7 @@ def database_read(_time, _type, min_lat, min_lng, max_lat, max_lng, lat_npoints,
             max_lng_iter = lng_npoints - 1
             w = (float(max_lng) - const_min_longitude) / (const_max_longitude - const_min_longitude) * float(const_longitude_npoints - 1)
         else:
-            max_lng_iter = int(floor((const_min_longitude - min_lng) * float(lng_npoints - 1) / (max_lng - min_lng)))
+            max_lng_iter = int(floor((const_max_longitude - min_lng) * float(lng_npoints - 1) / (max_lng - min_lng)))
             lng = min_lng + float(max_lng_iter) / float(lng_npoints - 1) * (max_lng - min_lng)
             w = (float(lng) - const_min_longitude) / (const_max_longitude - const_min_longitude) * float(const_longitude_npoints - 1)
         h -= x
