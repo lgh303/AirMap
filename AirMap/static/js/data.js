@@ -29,7 +29,7 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 			var lat_step= (lat_max-lat_min)/lat_npoints,  lng_step= (lng_max-lng_min)/lng_npoints;
 			for (var i=0, lat=lat_min; i<lat_npoints; ++i, lat+=lat_step)
 				for (var j=0, lng=lng_min; j<lng_npoints; ++j, lng+=lng_step)
-					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j]});
+					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j] - 13});
 
 			callback(framePoints);
 			
@@ -51,7 +51,7 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 
 function pullDataCallback(framePoints)
 {
-	heatmapOverlay.setDataSet({data:framePoints,max:500});
+	heatmapOverlay.setDataSet({data:framePoints,max:30});
 	heatmapOverlay.setOptions({"radius" : get_radius()});             //-----
 }
 
