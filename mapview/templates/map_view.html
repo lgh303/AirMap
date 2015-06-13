@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -107,7 +107,7 @@
 	<a href="../new_index" >
 	<img src="../static/bootstrap/img/home.png" style = "position:absolute;top:1%;left:0.5%;width:3%;z-index:3">
 	</a>
-				<div id="r-result"  style = "position:absolute; left:5%; top:30px;z-index:1 ">
+				<div id="r-result"  style = "position:absolute; left:5%; top:30px;z-index:1; width:300px; ">
 				  <div class="optionpanel" >
 					
 					<select id="stylelist" style="width:220px;"  onchange="changeMapStyle(this.value)"></select>
@@ -157,8 +157,8 @@
      alert('热力图目前只支持有canvas支持的浏览器,您所使用的浏览器不能使用热力图功能~')
  }
 
- var map = new BMap.Map("allmap");
- var heatmapOverlay = new BMapLib.HeatmapOverlay({"radius" : get_radius()});
+ var map = new BMap.Map("allmap", {minZoom:6, maxZoom:15});
+ var heatmapOverlay = new BMapLib.HeatmapOverlay({"radius" : get_radius(), "opacity":0.654});
 
  init_mapstylelist(document.getElementById('stylelist'));
  init_airmap();

@@ -7,14 +7,14 @@ import time;
 from django.shortcuts import HttpResponse
 import json
 # TODO: latitude and longitude sample width incorrect
-'''
-def database_read(time, type, min_lat, min_lng, max_lat, max_lng, lat_npoints, lng_npoints):
-    query_result = numpy.random.uniform(low=0, high=100, size=(lat_npoints, lng_npoints));
-    return query_result
 
-def database_bound(_types=[]):
-    return datetime(2015, 5, 11, 11, 0, 0), datetime(2015, 5, 21, 11, 0, 0);
-'''
+# def database_read(time, type, min_lat, min_lng, max_lat, max_lng, lat_npoints, lng_npoints):
+#     query_result = numpy.random.uniform(low=0, high=100, size=(lat_npoints, lng_npoints));
+#     return query_result
+
+# def database_bound(_types=[]):
+#     return datetime(2015, 5, 11, 11, 0, 0), datetime(2015, 5, 21, 11, 0, 0);
+
 def getTimeBound(request):
     minTime, maxTime = database_bound();
     minTime_ms = time.mktime(minTime.timetuple()) * 1000;

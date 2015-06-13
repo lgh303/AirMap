@@ -18,22 +18,11 @@ function theLocation(){
 }
 
 function get_radius() {
-	return pixel_step(0.006, 0.006);
+    return 80;
 }
 
 function zoomed_callback() {   
     heatmapOverlay.setOptions({"radius" : get_radius()});
-}
-
-function pixel_step(lng_s, lat_s)
-{
-    var p1 = new BMap.Point(116, 39);
-    var p2 = new BMap.Point(116 + lng_s, 39 + lat_s);
-    var pix1 = map.pointToPixel(p1);
-    var pix2 = map.pointToPixel(p2);
-    var d_lng = pix2.x - pix1.x;
-    var d_lat = pix2.y - pix1.y;
-    return Math.sqrt(d_lng * d_lng + d_lat * d_lat);
 }
 
 function changeMapStyle(style){

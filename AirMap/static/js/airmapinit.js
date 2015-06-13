@@ -16,7 +16,8 @@ function init_airmap() {
     map.enableScrollWheelZoom(); // 允许滚轮缩放
 	map.disable3DBuilding();
 
-    map.centerAndZoom(new BMap.Point(116.4, 39.92), 15);             // 初始化地图，设置中心点坐标和地图级别
+    // map.centerAndZoom(new BMap.Point(116.4, 39.92), 15);             // 初始化地图，设置中心点坐标和地图级别
+    map.centerAndZoom(new BMap.Point(106.4, 30.92), 7);             // 初始化地图，设置中心点坐标和地图级别
     map.addEventListener("dragend", function(){    
         var center = map.getCenter();
         //alert("地图中心点变更为：" + center.lng + ", " + center.lat);    
@@ -66,7 +67,7 @@ function init_overview() {
 
 function init_dataset() {
 	cur_data_type = 'AQI';
-	cur_time_ms = new Date("May 13, 2015, 0:00:00").getTime();
+	cur_time_ms = new Date("May 12, 2015, 0:00:00").getTime();
 	setTimeBound();
 	var bound = map.getBounds();
     setFrame(bound.we, bound.re, bound.ve, bound.qe);

@@ -41,10 +41,9 @@ const_max_longitude = 134.3
 const_data_type = { #'PM2.5': 0,
                     'AQI': 1,
                     'temperature': 2,
-                    #'wind_north_component': 3,
-                    #'wind_east_component': 4,
-                    # 'humid': 5,
-                    # 'rain': 6
+                    'wind': 3,
+                    'humid': 5,
+                    'rain': 6
                     }
 
 # The minimum time interval in minutes, this is guaranteed to divide 60(1h), all 'time' parameters in queries must
@@ -55,8 +54,8 @@ const_time_interval = 60
 ############ WRITE: this part is only necessary for write operations ########################
 
 # The resolution of the data slice that will be written into the database
-const_latitude_npoints = 104
-const_longitude_npoints = 178
+const_latitude_npoints = 693
+const_longitude_npoints = 1187
 
 # The earlist time of data that could be written, the first datawrite for any type must be this time
 const_start_time = datetime(2015, 5, 12, 0, 0)
