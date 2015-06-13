@@ -63,7 +63,7 @@ function init_overview() {
 }
 
 function init_dataset() {
-	cur_data_type = 'temperature';
+	cur_data_type = 'AQI';
 	cur_time_ms = new Date("May 12, 2015, 20:00:00").getTime();
 	setTimeBound();
 	var bound = map.getBounds();

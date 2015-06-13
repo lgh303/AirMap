@@ -27,11 +27,32 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 
 			var framePoints= new Array();
 			var lat_step= (lat_max-lat_min)/lat_npoints,  lng_step= (lng_max-lng_min)/lng_npoints;
+
+            var value_offset = 0, value_range = 500;
+            switch(cur_data_type)
+            {
+            case "AQI":
+                break;
+            case "temperature":
+                value_offset = -13;
+                value_range = 30;
+                break;
+            case "wind":
+                break;
+            case "humid":
+                value_offset = 0;
+                value_range = 100;
+                break;
+            case "rain":
+                value_offset = 0;
+                value_range = 1;
+                break;
+            }
 			for (var i=0, lat=lat_min; i<lat_npoints; ++i, lat+=lat_step)
 				for (var j=0, lng=lng_min; j<lng_npoints; ++j, lng+=lng_step)
-					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j] - 13});
+					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j] + value_offset});
 
-			callback(framePoints);
+			callback(framePoints, value_range);
 			
 			stamp_ploted= new Date().getTime();
 			
@@ -49,9 +70,9 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
 	stamp_sended = new Date().getTime();
 }
 
-function pullDataCallback(framePoints)
+function pullDataCallback(framePoints, value_range)
 {
-	heatmapOverlay.setDataSet({data:framePoints,max:30});
+	heatmapOverlay.setDataSet({data:framePoints,max:value_range});
 	heatmapOverlay.setOptions({"radius" : get_radius()});             //-----
 }
 
