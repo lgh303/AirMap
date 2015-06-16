@@ -1,6 +1,7 @@
 import sys
 from manage import database_read
 from manage import database_bound
+from manage import read_time_range
 import numpy
 from datetime import datetime
 import time;
@@ -62,6 +63,33 @@ def getPoints(request):
         'values' : values
     }), content_type = 'application/json')
 
+def getOnePoint(request):
+    lng = float(request.GET.get('lng'))
+    lat = float(request.GET.get('lat'))
+    data_type = request.GET.get('data_type')
+    ts_ms = long(request.GET.get('ts'))
+    te_ms = long(request.GET.get('te'))
+
+    ts_s = ts_ms * 1.0 / 1000
+    te_s = te_ms * 1.0 / 1000
+
+    ts = datetime.fromtimestamp(ts_s)
+    te = datetime.fromtimestamp(te_s)
+    
+    try:
+        query_result = read_time_range(data_type, ts, te, lat, lng)
+    except Exception, e:
+        print(e)
+        print("Exception!")
+        raise
+
+    values = []
+    for i in range(0, len(query_result)):
+        values.append(query_result[i])
+    return HttpResponse(json.dumps({
+        'values' : values
+        }), content_type = 'application/json')
+
 def dataServer(request):
     request_type = request.GET.get('request_type');
 
@@ -69,4 +97,5 @@ def dataServer(request):
         return getPoints(request);
     elif request_type == 'getTimeBound':
         return getTimeBound(request);
-
+    elif request_type == 'getOnePoint':
+        return getOnePoint(request)

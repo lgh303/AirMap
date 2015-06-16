@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from time import time
 import sys
 from math import ceil, floor
+import json
 
 def read_lines(sock, recv_buffer=40960, delim='\n'):
     buffer = ''
@@ -42,8 +43,9 @@ const_data_type = { #'PM2.5': 0,
                     'AQI': 1,
                     'temperature': 2,
                     'wind': 3,
-                    'humid': 5,
-                    'rain': 6
+                    #'wind_east_component': 4,
+                     'humid': 5,
+                     'rain': 6
                     }
 
 # The minimum time interval in minutes, this is guaranteed to divide 60(1h), all 'time' parameters in queries must
@@ -89,7 +91,7 @@ def database_write(time, _type, data):
         cmd = {"variant": "Write", "fields": [{"t": str(time_conv(time, const_start_time, const_time_interval)), "data": data_str}]}
         send = bytes((str(cmd) + "\n").replace('\'', "\""))
         sock.sendall(send)
-        res = eval(gen.next())
+        res = json.loads(gen.next())
         if res['retcode'] != 0:
             print(res['payload'])
             raise DbError(res['payload'])
@@ -116,7 +118,7 @@ def database_bound(_types=[]):
             gen = read_lines(sock)
             sock.connect(('123.57.189.143', 9123 + const_data_type[_type]))
             sock.sendall(cmd)
-            res = eval(gen.next())
+            res = json.loads(gen.next())
             if res['retcode'] != 0:
                 raise DbError(res['payload'])
             minv = min(minv, int(res['payload']))
@@ -194,21 +196,46 @@ def database_read(_time, _type, min_lat, min_lng, max_lat, max_lng, lat_npoints,
                                                "w": w,
                                                "hnp": max_lat_iter - min_lat_iter + 1,
                                                "wnp": max_lng_iter - min_lng_iter + 1}]}
+        #print(x, y, h, w, min_lat_iter, max_lat_iter, min_lng_iter, max_lng_iter)
         gen = read_lines(sock)
         sock.connect(('123.57.189.143', 9123 + const_data_type[_type]))
         send = bytes((str(cmd) + "\n").replace('\'', "\""))
 
         sock.sendall(send)
-        res = eval(gen.next())
+        res = json.loads(gen.next())
         if res['retcode'] != 0:
             raise DbError(res['payload'])
         fetched_result = numpy.fromstring(res['payload'], dtype=float, sep=" ").reshape((max_lat_iter - min_lat_iter + 1, max_lng_iter - min_lng_iter + 1))
+        #print(fetched_result)
         assert(fetched_result.shape == (max_lat_iter - min_lat_iter + 1, max_lng_iter - min_lng_iter + 1))
         ret = numpy.full((lat_npoints, lng_npoints), numpy.nan)
         ret[min_lat_iter: max_lat_iter + 1, min_lng_iter: max_lng_iter + 1] = fetched_result
     finally:
         sock.close()
     return ret
+
+#[ts, te)
+def read_time_range(_type, ts, te, lat, lng):
+    cmd = {"variant": "GetTimeRange", "fields": [{"ts": str(time_conv(ts, const_start_time, const_time_interval)),
+                                           "te": str(time_conv(te, const_start_time, const_time_interval)),
+                                               "x": lat,
+                                               "y": lng,}]}
+
+    sock = socket()
+    gen = read_lines(sock)
+    try:
+        sock.connect(('123.57.189.143', 9123 + const_data_type[_type]))
+        send = bytes((str(cmd) + "\n").replace('\'', "\""))
+        sock.sendall(send)
+        res = json.loads(gen.next())
+        if res['retcode'] != 0:
+            raise DbError(res['payload'])
+        ret = [float(s) for s in res['payload'].strip().split(' ')]
+    finally:
+        sock.close()
+    return ret
+
+
 
 def test():
     data = numpy.array([[x + y for x in range(0, const_longitude_npoints)] for y in range(0, const_latitude_npoints)])
@@ -252,7 +279,7 @@ def start():
     return processes
 
 
-if __name__ == "__main__":
+def config_and_test():
     ps = []
     try:
         config()
@@ -261,3 +288,9 @@ if __name__ == "__main__":
     finally:
         for p in ps:
             p.terminate()
+
+def debug():
+    read_time_range('AQI', const_start_time, datetime(2015, 5, 13, 0, 0), 30, 80)
+
+if __name__ == "__main__":
+    debug()

@@ -115,6 +115,63 @@ function setTime(time_ms)
 }
 
 
-var points =[
-[{"lng":116.421004,"lat":39.961727,"count":14}
-]]
+// for markers
+function setDataOnePoint(lng, lat){
+    pullDataOnePoint(lng, lat, cur_data_type, pullDataOnePointCallback);
+}
+
+function pullDataOnePoint(lng, lat, data_type, callback){
+    var xmlhttp;
+    if (window.XMLHttpRequest)
+    {
+        xmlhttp = new XMLHttpRequest();
+    }
+    else
+    {
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            stamp_recved= new Date().getTime();
+            var responseText = xmlhttp.responseText.replace(/NaN/g, "0.03");
+            var responseObj = JSON.parse(responseText);
+            console.log(responseText);
+            var values= responseObj.values;
+
+            points = []
+            for (var i=0; i<values.length; i=i+1)
+                points.push(values[i])
+            /*
+            var framePoints= new Array();
+            for (var i=0, lat=lat_min; i<lat_npoints; ++i, lat+=lat_step)
+                for (var j=0, lng=lng_min; j<lng_npoints; ++j, lng+=lng_step)
+                    framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j] * value_factor + value_offset});
+            */
+            callback();
+            
+            stamp_ploted= new Date().getTime();
+            }
+    }
+    xmlhttp.open(
+        "GET",
+        "dataServer?request_type=getOnePoint&lng="+lng+"&lat="+lat+"&data_type="+data_type+"&ts="+minTime_ms+"&te="+cur_time_ms,
+        true
+        );
+    xmlhttp.send();
+    stamp_sended = new Date().getTime();
+}
+
+function pullDataOnePointCallback(){
+    echartDrawFunc();
+    /*
+    var bound = map.getBounds();
+    var moved = ( (bound.ve != cur_lat_min) || (bound.qe != cur_lat_max) || (bound.we != cur_lng_min) || (bound.re != cur_lng_max) );
+    if(moved){
+        setFrame(bound.we, bound.re, bound.ve, bound.qe);
+    }
+    */
+}
+
+var points =[]

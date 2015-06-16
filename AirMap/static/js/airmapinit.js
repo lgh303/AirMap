@@ -1,20 +1,20 @@
 function init_mapstylelist(sel) {
     for(var key in mapstyles){
-	    var style = mapstyles[key];
-	    var item = new  Option(style.title,key);
-	    sel.options.add(item);
+        var style = mapstyles[key];
+        var item = new  Option(style.title,key);
+        sel.options.add(item);
     }
-	sel.value = 'midnight';
+    sel.value = 'midnight';
 }
 
 function init_airmap() {
-	map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
-	map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
-	map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
-	map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
+    map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
+    map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
+    map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
+    map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
 
     map.enableScrollWheelZoom(); // 允许滚轮缩放
-	map.disable3DBuilding();
+    map.disable3DBuilding();
 
     // map.centerAndZoom(new BMap.Point(116.4, 39.92), 15);             // 初始化地图，设置中心点坐标和地图级别
     map.centerAndZoom(new BMap.Point(106.4, 30.92), 7);             // 初始化地图，设置中心点坐标和地图级别
@@ -32,11 +32,12 @@ function init_airmap() {
 
 function init_marker() {
     // defined in marker.js
-	map.addEventListener("click", function(e){
+    map.addEventListener("click", function(e){
         onLeftClick(e);
     });
-    setRightClickMenu();
-    showMarker();
+    map.addEventListener("rightclick", function(e) {
+        onRightClick(e);
+    });
 }
 
 function init_overlay() {
@@ -47,7 +48,7 @@ function init_overlay() {
 
 function init_timeline()
 {
-	scale_timeline(cur_time_ms-hour_ms*24, cur_time_ms, hour_ms, cur_time_ms);
+    scale_timeline(cur_time_ms-hour_ms*24, cur_time_ms, hour_ms, cur_time_ms);
 }
 
 function init_typectrl() {
@@ -63,10 +64,10 @@ function init_overview() {
 }
 
 function init_dataset() {
-	cur_data_type = 'AQI';
-	cur_time_ms = new Date("May 12, 2015, 20:00:00").getTime();
-	setTimeBound();
-	var bound = map.getBounds();
+    cur_data_type = 'AQI';
+    cur_time_ms = new Date("May 12, 2015, 20:00:00").getTime();
+    setTimeBound();
+    var bound = map.getBounds();
     setFrame(bound.we, bound.re, bound.ve, bound.qe);
 }
 

@@ -1,4 +1,46 @@
-function drawWeather(){
+function getEchartName(){
+    switch(cur_data_type){
+    case "AQI":
+        return "AQI";
+    case "temperature":
+        return "温度";
+    case "wind":
+        return "风力";
+    case "humid":
+        return "湿度";
+    case "rain":
+        return "降雨";
+    }
+}
+
+function getDateList(){
+    var max_length = points.length;
+    if(points.length > 18){
+        max_length = 18;
+    }
+    var today = new Date(cur_time_ms);
+    var list = [];
+    list.push(today.getMonth() + "月" + today.getDate() + "日");
+    for(var i=1; i < max_length; i++){
+        d = new Date(today - 60*60*1000*i);
+        list.push(d.getHours() + "H");
+    }
+    return list.reverse();
+}
+
+function getValueList(){
+    var max_length = points.length;
+    if(points.length > 18){
+        max_length = 18;
+    }
+    var list = [];
+    for(var i=0; i < max_length; i++){
+        list.push(points[i]);
+    }
+    return list.reverse();   
+}
+
+function drawInBar(){
     require.config({
         paths: {
             echarts: 'http://echarts.baidu.com/build/dist'
@@ -10,8 +52,9 @@ function drawWeather(){
             'echarts/chart/bar' // 使用柱状图就加载bar模块，按需加载
         ],
         function (ec) {
-            var chartContainer = document.getElementById("weather");
+            var chartContainer = document.getElementById("echartDrawBoard");
             var myChart = ec.init(chartContainer);
+            var echartName = getEchartName();
             myChart.setOption({
                 title: {
                     text: "", 
@@ -21,7 +64,7 @@ function drawWeather(){
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['天气状况'] //与series保持一致
+                    data: [echartName] //与series保持一致
                 },
                 toolbox: {
                     show: true,
@@ -38,16 +81,7 @@ function drawWeather(){
                     {
                         type: 'category',
                         name: "日期",
-                        data: function(){
-                            var today = new Date();
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                var d = new Date(today - 24*60*60*1000*i);
-                                list.push(d.getDate());
-                            }
-                            return list;
-                        }()
+                        data: getDateList()
                     }
                 ],
                 yAxis: [
@@ -57,16 +91,9 @@ function drawWeather(){
                 ],
                 series: [
                     {
-                        name: '天气状况',
+                        name: echartName,
                         type: 'bar',
-                        data: function(){
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                list.push(points[i][globalIterator].count);
-                            }
-                            return list;
-                        }(),
+                        data: getValueList(),
                         markPoint : {
                             data : [
                                 {type : 'max', name: '最大值'},
@@ -86,7 +113,7 @@ function drawWeather(){
 }
 
 // pollution
-function drawPollution(){
+function drawInLine(){
     require.config({
         paths: {
             echarts: 'http://echarts.baidu.com/build/dist'
@@ -98,8 +125,9 @@ function drawPollution(){
             'echarts/chart/line'
         ],
         function (ec) {
-            var chartContainer = document.getElementById("pollution");
+            var chartContainer = document.getElementById("echartDrawBoard");
             var myChart = ec.init(chartContainer);
+            var echartName = getEchartName();
             myChart.setOption({
                 title: {
                     text: "", 
@@ -109,8 +137,7 @@ function drawPollution(){
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['污染程度'], //与series保持一致
-                    y:"bottom"
+                    data: [echartName] //与series保持一致
                 },
                 toolbox: {
                     show: true,
@@ -127,16 +154,7 @@ function drawPollution(){
                     {
                         type: 'category',
                         name: "日期",
-                        data: function(){
-                            var today = new Date();
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                var d = new Date(today - 24*60*60*1000*i);
-                                list.push(d.getDate());
-                            }
-                            return list;
-                        }()
+                        data: getDateList()
                     }
                 ],
                 yAxis: [
@@ -148,16 +166,9 @@ function drawPollution(){
                 ],
                 series: [
                     {
-                        name: '污染程度',
+                        name: echartName,
                         type: 'line',
-                        data: function(){
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                list.push(points[i][globalIterator].count);
-                            }
-                            return list;
-                        }(),
+                        data: getValueList(),
                         markPoint : {
                             data : [
                                 {type : 'max', name: '最大值'},
@@ -176,8 +187,7 @@ function drawPollution(){
     );
 }
 
-// temperature
-function drawTemperature(){
+function drawInShape(){
     require.config({
         paths: {
             echarts: 'http://echarts.baidu.com/build/dist'
@@ -189,8 +199,9 @@ function drawTemperature(){
             'echarts/chart/line'
         ],
         function (ec) {
-            var chartContainer = document.getElementById("temperature");
+            var chartContainer = document.getElementById("echartDrawBoard");
             var myChart = ec.init(chartContainer);
+            var echartName = getEchartName();
             myChart.setOption({
                 title: {
                     text: "", 
@@ -200,8 +211,7 @@ function drawTemperature(){
                     trigger: 'axis'
                 },
                 legend: {
-                    data: ['气温信息'], //与series保持一致
-                    y:"bottom"
+                    data: [echartName] //与series保持一致
                 },
                 toolbox: {
                     show: true,
@@ -218,16 +228,7 @@ function drawTemperature(){
                     {
                         type: 'category',
                         name: "日期",
-                        data: function(){
-                            var today = new Date();
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                var d = new Date(today - 24*60*60*1000*i);
-                                list.push(d.getDate());
-                            }
-                            return list;
-                        }()
+                        data: getDateList()
                     }
                 ],
                 yAxis: [
@@ -239,18 +240,11 @@ function drawTemperature(){
                 ],
                 series: [
                     {
-                        name:'气温信息',
+                        name: echartName,
                         type:'line',
                         smooth:true,
                         itemStyle: {normal: {areaStyle: {type: 'default'}}},      
-                        data: function(){
-                            var data_length = points.length;
-                            var list = [];
-                            for(var i=0; i<data_length; i++){
-                                list.push(points[i][globalIterator].count);
-                            }
-                            return list;
-                        }()
+                        data: getValueList()
                     }
                 ]
             });
@@ -258,36 +252,31 @@ function drawTemperature(){
     );
 }
 
-//</script>
-
-//<script type="text/javascript" language="javascript">
-function weather(){
+function echartDrawFunc(){
     var sContent =
-        "<div id=\"weather\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
+        "<div id=\"echartDrawBoard\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
     var infoWindow = new BMap.InfoWindow(sContent);
     var drawPoint = new BMap.Point(globalPoint.lng + 0.001, globalPoint.lat + 0.001);
     map.openInfoWindow(infoWindow, drawPoint);
-    drawWeather();
+    
+    switch(cur_data_type){
+        case "AQI":
+            drawInBar();
+            break;
+        case "temperature":
+            drawInLine();
+            break;
+        case "wind":
+            drawInShape();
+            break;
+        case "humid":
+            drawInBar();
+            break;
+        case "rain":
+            drawInLine();
+            break;
+    }
 }
-
-function pollution(){
-    var sContent =
-        "<div id=\"pollution\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
-    var infoWindow = new BMap.InfoWindow(sContent);
-    var drawPoint = new BMap.Point(globalPoint.lng + 0.002, globalPoint.lat + 0.002);
-    map.openInfoWindow(infoWindow, drawPoint);
-    drawPollution();
-}
-
-function temperature(){
-    var sContent =
-        "<div id=\"temperature\" style=\"height: 400px; width:800px; border:1px solid #ccc; padding: 10px;\"></div>";
-    var infoWindow = new BMap.InfoWindow(sContent);
-    var drawPoint = new BMap.Point(globalPoint.lng + 0.003, globalPoint.lat + 0.003);
-    map.openInfoWindow(infoWindow, drawPoint);
-    drawTemperature();
-}
-//</script>
 
 //<script type="text/javascript" language"javascript">
 // global variable for station information
@@ -317,72 +306,24 @@ function getStation(event){
     globalPoint.lat = points[0][which].lat;
     globalIterator = which;
 }
-//</script>
 
-//<script>
-function setRightClickMenu(){
-    var menu = new BMap.ContextMenu();
-    var txtMenuItem = [
-        {
-            text:'放大',
-            callback:function(){map.zoomIn()}
-        },
-        {
-            text:'缩小',
-            callback:function(){map.zoomOut()}
-        },
-        {
-            text:"其他",
-            callback:function(){alert("no function availiable")}
-        }
-    ];
-    for(var i=0; i < txtMenuItem.length; i++){
-        menu.addItem(new BMap.MenuItem(txtMenuItem[i].text,txtMenuItem[i].callback,100));
-    }
-    map.addContextMenu(menu);
-}
-//</script>
-
-//<script>
 function onLeftClick(event){
+    /*
     current_x = event.point.lng;
     current_y = event.point.lat;
     var opts = {
-        width : 150, // 信息窗口宽度
-        height: 80, // 信息窗口高度
-        title : "Weather Here" // 信息窗口标题
-    }
-    //弹出一个提示窗口
+        width : 150,
+        height: 80,
+        title : "Weather Here"
+    }    
     var infoWindow = new BMap.InfoWindow("Current position:("+current_x+":"+current_y+")", opts);
     map.openInfoWindow(infoWindow, new BMap.Point(current_x,current_y));        // 打开信息窗口
+    */
 }
-//</script>
 
-//<script>
-function showMarker(){
-
-    var sContent =
-        "<div id=\"main\" style=\"height: 200px; width:400px; border:1px solid #ccc; padding: 10px;\">"
-        + "<h1> 气象站点信息 </h1>"
-        + "<form name = \"form1\" >"
-        + "<p><input type = \"BUTTON\" value = \" 天气 \" onClick = \"weather()\"></p>"
-        + "<p><input type = \"BUTTON\" value = \" 污染 \" onClick = \"pollution()\"></p>"
-        + "<p><input type = \"BUTTON\" value = \" 温度 \" onClick = \"temperature()\"></p>"
-        + "</form>"
-        + "</div>";
-    var infoWindow = new BMap.InfoWindow(sContent);
-
-    for(var i=0; i<points[0].length; i++){
-        var p = new BMap.Point(points[0][i].lng, points[0][i].lat);
-        var station = new BMap.Marker(p);
-        station.addEventListener("rightclick", function(e){          
-            this.openInfoWindow(infoWindow);
-            getStation(e);
-            //drawStation();
-            //document.getElementById('imgDemo').onload = function (){
-            //    infoWindow.redraw();
-            //}
-        });
-        map.addOverlay(station);
-    }
+function onRightClick(event){
+    current_lng = event.point.lng;
+    current_lat = event.point.lat;
+    globalPoint = event.point;
+    setDataOnePoint(current_lng, current_lat);
 }
