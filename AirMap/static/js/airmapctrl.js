@@ -5,7 +5,7 @@ function isSupportCanvas(){
 
 function theLocation(){
 	var city = document.getElementById("cityName").value;
-	alert(city);
+	//alert(city);
 	if(city != ""){
 		map.centerAndZoom(city,11);      // 用城市名设置地图中心点
 		var myGeo = new BMap.Geocoder();
