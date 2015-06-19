@@ -3,6 +3,7 @@ var selected_ms; //当前pip对应时间点
 var pips;   //pip总点数
 
 var hour_ms= 3600*1000;
+var day_ms= hour_ms*24;
 
 var maxTime_ms;
 var minTime_ms;
@@ -64,13 +65,13 @@ function scale_timeline(startTime_ms, endTime_ms, step_ms, selectTime_ms)
 		//maxTime_ms+'\nend>max:'+(endTime_ms>maxTime_ms)+'\n\nend: '+new Date(endTime_ms)+'\nmax: '+new Date(maxTime_ms));
 	if (startTime_ms < minTime_ms)
 	{
-		alert('out of lower bound, reset to: \n' + new Date(minTime_ms) + '\origin: \n'+ new Date(startTime_ms));
+		//alert('out of lower bound, reset to: \n' + new Date(minTime_ms) + '\origin: \n'+ new Date(startTime_ms));
 		startTime_ms = minTime_ms;
 	}
 	
 	if (endTime_ms > maxTime_ms)
 	{
-		alert('out of upper bound, reset to: \n' + new Date(maxTime_ms) + '\norigin: \n'+ new Date(endTime_ms));
+		//alert('out of upper bound, reset to: \n' + new Date(maxTime_ms) + '\norigin: \n'+ new Date(endTime_ms));
 		endTime_ms = maxTime_ms;
 	}
 	
@@ -102,15 +103,20 @@ function scale_timeline(startTime_ms, endTime_ms, step_ms, selectTime_ms)
 	var labelstep= 5;             //
 	for (var i=0; i<pips; i++)
 	{
-		if (i%5==0)
-		{
-			var date= new Date();
-			date.setTime(dates_ms[i]);
-			
-			labels[i]= date.toTimeString().substring(0,5);
-		}
+		if (dates_ms[i]%day_ms == 0)
+			labels[i]= new Date(dates_ms[i]).toString().substring(4,10);
 		else
-			labels[i]="";
+		{
+			if (i%5==0)
+			{
+				var date= new Date();
+				date.setTime(dates_ms[i]);
+				
+				labels[i]= date.toTimeString().substring(0,5);
+			}
+			else
+				labels[i]="";
+		}
 		
 	}
 	

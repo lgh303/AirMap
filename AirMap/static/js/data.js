@@ -59,7 +59,12 @@ function pullData(lat_min, lat_max, lng_min, lng_max, data_type, time_ms, callba
             }
 			for (var i=0, lat=lat_min; i<lat_npoints; ++i, lat+=lat_step)
 				for (var j=0, lng=lng_min; j<lng_npoints; ++j, lng+=lng_step)
-					framePoints.push({"lng":lng,"lat":lat,"count":values[i*lng_npoints+j] * value_factor + value_offset});
+				{
+					var value = values[i*lng_npoints+j] * value_factor + value_offset;
+					if (value < 0)
+						value = 0.0001;
+					framePoints.push({"lng":lng,"lat":lat,"count":value});
+				}
 
 			callback(framePoints, value_range);
 			
